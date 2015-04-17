@@ -1,0 +1,248 @@
+<html>
+<head>
+<title>woah</title>
+</head>
+<body>
+
+<canvas id="space" width="600" height="600" color="grey"></canvas>
+
+<script type="application/javascript">
+
+
+
+var canvas = document.getElementById("space");				
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "grey";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+var gravity = 10;
+var keys = [];
+var boxes = [];
+var enemies = [];
+var color = "#aee";
+
+var deadimage = 'Dead Person.gif';
+var deadtwitchimage = 'Dead Person Twitch.gif';
+
+var forwardsheet = 'ForwardSheet.png';
+var backwardsheet = 'BackwardSheet.png';
+
+var deadanimate = 'DeadTwitchGif.gif';
+
+var forwardsjump = 'jumpforwards.png';
+var backwardsjump = 'jumpbackwards.png';
+
+var canvasheight = 600;
+var canvaswidth = 600;
+
+var framevalue = 0;
+var framespeed = 1;
+
+var framepos = 0;
+
+var blank = 'blank.png';
+
+var playerjump = false;
+
+var activespeech = false;
+
+var Xoffset = 0;
+
+var bubbles = ['speech1.png', 'speech2.png', 'speech3.png', 'speech4.png', 'speech5.png'];
+
+function entityObject(x,y,image) {
+this.Image = new Image();
+this.Image.src = image;
+this.x = x;
+this.y = y;
+this.jumpspeed = 0;
+};
+
+
+
+var speechbubble1 = new entityObject(0,0,blank);
+
+var player = new entityObject(0,400,forwardsheet);
+
+var floor = new entityObject(0,485,'floor.png');
+
+var Fscenery = new entityObject(0,0,'Fscenery.png');
+
+var Bscenery = new entityObject(0,0,'Bscenery.png');
+
+
+
+function gameloop(){
+
+if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
+
+//jumpspeed
+
+if(player.jumpspeed > 0){player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01);}
+	
+	player.y = player.y - player.jumpspeed;
+	
+	if(framepos == 280){framepos = 0};
+	
+	if(framevalue == (framespeed + 1)){framevalue = 0};
+	
+
+//keys
+if (keys[38] || keys[32] || keys[87]){
+	//space, w, up arrow
+	
+	if(player.y >= 400){
+		player.jumpspeed = 30;
+	
+		player.Image.src = forwardsjump;
+	}
+	
+}
+
+  if (keys[39] || keys[68]) {
+        // right arrow
+		
+		player.x = player.x + 3.5;
+		
+		
+		if(player.y < 400){
+			player.Image.src = forwardsjump
+			}
+			
+			else if(player.y >= 400){
+			
+			player.Image.src = forwardsheet;
+			
+			framevalue = framevalue + 1;
+			
+			
+			if(framevalue == framespeed){
+				framepos = framepos + 40
+			}
+		}
+	}
+		
+		
+	else if (keys[37] || keys[65]) {
+        // left arrow
+		
+		player.x = player.x - 3.5;
+		
+		if(player.y < 400){
+			player.Image.src = backwardsjump;
+			}
+			
+			else if(player.y >= 400){
+			
+			player.Image.src = backwardsheet;
+			
+			framevalue = framevalue + 1;
+			
+			if(framevalue == framespeed){
+				framepos = framepos + 40
+			}
+		}
+	}
+	else {
+	framepos = 0;
+	
+	};
+		
+	if (keys[40]) {
+	player.Image.src = deadanimate;
+	}
+		
+		
+		
+		//BUBBLES
+		
+	if (keys[84] && activespeech == false){
+	
+	
+	var randombubble = Math.floor(Math.random()*5);
+	console.log(randombubble);
+	speechbubble1.Image.src = bubbles[randombubble];
+	activespeech = true;
+	setTimeout ("speechbubble1.Image.src = blank", 4000);
+	setTimeout ("activespeech = false", 4000);
+	}
+	
+	if (player.y < floor.y){player.y += gravity}
+
+	Draw();
+
+	setTimeout(gameloop, 25);
+
+};
+	
+function Draw(){
+
+	//draw background
+	ctx.fillStyle = "grey";
+	ctx.fillRect(0,0,canvas.width,canvas.height);
+
+
+	//draw Bscenery
+	
+	ctx.drawImage(Bscenery.Image,Bscenery.x - (Xoffset%(4*canvaswidth))/4,Bscenery.y);
+
+	if(Xoffset > 0)
+		{
+		ctx.drawImage(Bscenery.Image, canvaswidth+(Bscenery.x -(Xoffset % (4*canvaswidth))/4),Bscenery.y)
+		}
+
+	//draw Fscenery
+
+	ctx.drawImage(Fscenery.Image,Fscenery.x - (Xoffset%(2*canvaswidth))/2,Fscenery.y);
+
+	if(Xoffset > 0)
+	{
+		ctx.drawImage(Fscenery.Image, canvaswidth+(Fscenery.x -(Xoffset % (2*canvaswidth))/2),Fscenery.y)
+	}
+
+
+	//draw floor
+
+	ctx.drawImage(floor.Image, floor.x - (Xoffset % canvaswidth),floor.y);
+
+	if(Xoffset > 0)
+		{
+		ctx.drawImage(floor.Image, canvaswidth+(floor.x -(Xoffset % canvaswidth)),floor.y)
+		}
+
+	//enforce floor
+	if(player.y > 400)
+		{
+		player.y = 400
+		}
+	//draw player;
+	if (player.y >= 400) {
+		ctx.drawImage(player.Image, framepos, 0, 40, 94, player.x - Xoffset, player.y, 40, 94);
+	} else {
+		ctx.drawImage(player.Image, player.x - Xoffset, player.y);
+	}
+	 
+	ctx.drawImage(speechbubble1.Image,((player.x+35)-Xoffset),player.y-30);
+};
+
+
+Draw();
+
+
+
+document.body.addEventListener("keydown", function (e) {
+    keys[e.keyCode] = true;
+});
+document.body.addEventListener("keyup", function (e) {
+    keys[e.keyCode] = false;
+});
+
+window.addEventListener("load", function () {
+    gameloop();
+});
+
+
+
+</script>
+</body>
+</html>

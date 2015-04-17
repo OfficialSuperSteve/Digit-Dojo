@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>woah</title>
+</head>
+<body>
+
+<canvas id="space" width="600" height="600" color="grey"></canvas>
+
+<script type="application/javascript">
+
+
+
+var canvas = document.getElementById("space");				
+var ctx = canvas.getContext("2d");
+ctx.fillStyle = "grey";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+var gravity = 2;
+var keys = [];
+var boxes = [];
+var color = "#aee";
+
+
+
+
+
+function entityObject() {
+this.x = 25;
+this.y = 25;
+this.width = 40;
+this.height = 40;
+};
+
+var player = new entityObject();
+
+
+
+
+function gameloop(){
+
+//keys
+if (keys[38] || keys[32] || keys[87]){
+	//space, w, up arrow
+	player.y = player.y - 25;
+}
+
+  if (keys[39] || keys[68]) {
+        // right arrow
+		player.x = player.x + 2.5;
+		}
+		
+		if (keys[37] || keys[65]) {
+        // left arrow
+		player.x = player.x - 2.5;}
+		
+	if (player.y < 400){player.y += gravity;}
+	
+	
+	
+	//draw background
+	ctx.fillStyle = "grey";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+//draw floor
+
+ctx.fillStyle = "black";
+ctx.fillRect(player.x,player.y,player.width,player.height);
+
+//draw player
+ctx.fillStyle = color;
+ctx.fillRect(player.x,player.y,player.width,player.height);
+
+setTimeout(gameloop, 25);
+};
+
+document.body.addEventListener("keydown", function (e) {
+    keys[e.keyCode] = true;
+});
+document.body.addEventListener("keyup", function (e) {
+    keys[e.keyCode] = false;
+});
+
+window.addEventListener("load", function () {
+    gameloop();
+});
+
+</script>
+</body>
+</html>
