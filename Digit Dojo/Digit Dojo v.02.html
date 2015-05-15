@@ -15,6 +15,7 @@ var ctx = canvas.getContext("2d");
 ctx.fillStyle = "grey";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
+
 var gravity = 10;
 var keys = [];
 var boxes = [];
@@ -31,6 +32,8 @@ var deadanimate = 'DeadTwitchGif.gif';
 
 var forwardsjump = 'jumpforwards.png';
 var backwardsjump = 'jumpbackwards.png';
+
+var forwardsenemy = 'BadGuy1.png';
 
 var canvasheight = 600;
 var canvaswidth = 600;
@@ -64,6 +67,8 @@ var speechbubble1 = new entityObject(0,0,blank);
 
 var player = new entityObject(0,400,forwardsheet);
 
+var enemy = new entityObject(120,0,forwardsenemy)
+
 var floor = new entityObject(0,485,'floor.png');
 
 var Fscenery = new entityObject(0,0,'Fscenery.png');
@@ -72,7 +77,20 @@ var Bscenery = new entityObject(0,0,'Bscenery.png');
 
 
 
+
+
+
 function gameloop(){
+
+
+
+
+//console.log(player.y);
+if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
+
+//jumpspeed
+
+
 
 	if(player.x > (canvaswidth/2)) {
 		Xoffset = player.x - (canvaswidth/2)
@@ -86,22 +104,41 @@ function gameloop(){
 		
 	player.y = player.y - player.jumpspeed;
 	
-	if(framepos == 280){framepos = 0};
+	if(framepos == 308){framepos = 0};
 	
 	if(framevalue == (framespeed + 1)){framevalue = 0};
-		
 
-	//keys
-	if (keys[38] || keys[32] || keys[87]){
-		//space, w, up arrow
+	
+	var srcsimplifier = player.Image.src.replace(/^.*[\\\/]/, '');
+
+console.log(srcsimplifier);
+	
+if(player.y < 400){
+player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
+} else if (srcsimplifier == forwardsjump){
+	player.Image.src = forwardsheet;
+	} else if (srcsimplifier == backwardsjump) {
+		player.Image.src = backwardsheet;	
+		};
 		
-		if(player.y >= 400){
-			player.jumpspeed = 30;
+	
 		
+	
+//keys
+if (keys[38] || keys[32] || keys[87]){
+	//space, w, up arrow
+	
+	if(player.y >= 400){
+		player.jumpspeed = 30;
+		
+		if(player.jumpspeed > 0.1){
 			player.Image.src = forwardsjump;
+			}
 		}
-		
-	}
+	};
+	
+
+
 
   	if (keys[39] || keys[68]) {
         // right arrow
@@ -111,9 +148,10 @@ function gameloop(){
 		
 		if(player.y < 400){
 			player.Image.src = forwardsjump
-		}
-			
+	
+			}
 		else if(player.y >= 400){
+
 			
 			player.Image.src = forwardsheet;
 			
@@ -121,7 +159,7 @@ function gameloop(){
 			
 			
 			if(framevalue == framespeed){
-				framepos = framepos + 40
+				framepos = framepos + 44
 			}
 		}
 	}
@@ -143,7 +181,7 @@ function gameloop(){
 			framevalue = framevalue + 1;
 			
 			if(framevalue == framespeed){
-				framepos = framepos + 40
+				framepos = framepos + 44
 			}
 		}
 	}
@@ -171,11 +209,14 @@ function gameloop(){
 	}
 	
 	if (player.y < floor.y){player.y += gravity}
+	
+	if (enemy.y < floor.y){enemy.y += gravity}
 
 	Draw();
 
 	setTimeout(gameloop, 25);
 
+	
 };
 	
 function Draw(){
@@ -217,10 +258,20 @@ function Draw(){
 	if(player.y > 400)
 		{
 		player.y = 400
-		}
+		};
+		
+	if(enemy.y > 400)
+		{
+		enemy.y = 400
+		};
+		
+	//draw enemy
+	
+	ctx.drawImage(enemy.Image, enemy.x, enemy.y);
+	
 	//draw player;
 	if (player.y >= 400) {
-		ctx.drawImage(player.Image, framepos, 0, 40, 94, player.x - Xoffset, player.y, 40, 94);
+		ctx.drawImage(player.Image, framepos, 0, 44, 94, player.x - Xoffset, player.y, 44, 94);
 	} else {
 		ctx.drawImage(player.Image, player.x - Xoffset, player.y);
 	}
