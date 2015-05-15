@@ -24,13 +24,13 @@ var color = "#aee";
 var deadimage = 'Dead Person.gif';
 var deadtwitchimage = 'Dead Person Twitch.gif';
 
-var forwardsheet = 'ForwardSheet.png';
-var backwardsheet = 'BackwardSheet.png';
+var forwardsheet = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/ForwardSheet.png';
+var backwardsheet = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/BackwardSheet.png';
 
 var deadanimate = 'DeadTwitchGif.gif';
 
-var forwardsjump = 'jumpforwards.png';
-var backwardsjump = 'jumpbackwards.png';
+var forwardsjump = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/jumpforwards.png';
+var backwardsjump = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/jumpbackwards.png';
 
 var canvasheight = 600;
 var canvaswidth = 600;
@@ -73,28 +73,39 @@ var Bscenery = new entityObject(0,0,'Bscenery.png');
 
 
 function gameloop(){
-
+//console.log(player.y);
 if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
 
 //jumpspeed
+console.log(player.Image.src)
 
-if(player.jumpspeed > 0){player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01);}
 	
 	player.y = player.y - player.jumpspeed;
 	
-	if(framepos == 280){framepos = 0};
+	if(framepos == 308){framepos = 0};
 	
 	if(framevalue == (framespeed + 1)){framevalue = 0};
 	
-
+if(player.y < 400){
+player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
+} else if (player.Image.src == forwardsjump){
+	player.Image.src = forwardsheet;
+	} else if (player.Image.src == backwardsjump) {
+		player.Image.src = backwardsheet;	
+		}
+	
+		
+	
 //keys
 if (keys[38] || keys[32] || keys[87]){
 	//space, w, up arrow
 	
 	if(player.y >= 400){
 		player.jumpspeed = 30;
-	
-		player.Image.src = forwardsjump;
+		
+		if(player.jumpspeed > 0.1){
+			player.Image.src = forwardsjump;
+		}
 	}
 	
 }
@@ -107,9 +118,9 @@ if (keys[38] || keys[32] || keys[87]){
 		
 		if(player.y < 400){
 			player.Image.src = forwardsjump
-			}
+		
 			
-			else if(player.y >= 400){
+			}else if(player.y >= 400){
 			
 			player.Image.src = forwardsheet;
 			
@@ -117,7 +128,7 @@ if (keys[38] || keys[32] || keys[87]){
 			
 			
 			if(framevalue == framespeed){
-				framepos = framepos + 40
+				framepos = framepos + 44
 			}
 		}
 	}
@@ -139,7 +150,7 @@ if (keys[38] || keys[32] || keys[87]){
 			framevalue = framevalue + 1;
 			
 			if(framevalue == framespeed){
-				framepos = framepos + 40
+				framepos = framepos + 44
 			}
 		}
 	}
@@ -217,7 +228,7 @@ function Draw(){
 		}
 	//draw player;
 	if (player.y >= 400) {
-		ctx.drawImage(player.Image, framepos, 0, 40, 94, player.x - Xoffset, player.y, 40, 94);
+		ctx.drawImage(player.Image, framepos, 0, 44, 94, player.x - Xoffset, player.y, 44, 94);
 	} else {
 		ctx.drawImage(player.Image, player.x - Xoffset, player.y);
 	}
