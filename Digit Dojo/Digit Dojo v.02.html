@@ -67,7 +67,7 @@ var speechbubble1 = new entityObject(0,0,blank);
 
 var player = new entityObject(0,400,forwardsheet);
 
-var enemy = new entityObject(60,0,forwardsenemy)
+var enemy = new entityObject(120,0,forwardsenemy)
 
 var floor = new entityObject(0,485,'floor.png');
 
@@ -209,6 +209,8 @@ if (keys[38] || keys[32] || keys[87]){
 	}
 	
 	if (player.y < floor.y){player.y += gravity}
+	
+	if (enemy.y < floor.y){enemy.y += gravity}
 
 	Draw();
 
@@ -256,7 +258,12 @@ function Draw(){
 	if(player.y > 400)
 		{
 		player.y = 400
-		}
+		};
+		
+	if(enemy.y > 400)
+		{
+		enemy.y = 400
+		};
 		
 	//draw enemy
 	
