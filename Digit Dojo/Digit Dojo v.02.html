@@ -15,6 +15,7 @@ var ctx = canvas.getContext("2d");
 ctx.fillStyle = "grey";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
+
 var gravity = 10;
 var keys = [];
 var boxes = [];
@@ -24,13 +25,15 @@ var color = "#aee";
 var deadimage = 'Dead Person.gif';
 var deadtwitchimage = 'Dead Person Twitch.gif';
 
-var forwardsheet = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/ForwardSheet.png';
-var backwardsheet = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/BackwardSheet.png';
+var forwardsheet = 'ForwardSheet.png';
+var backwardsheet = 'BackwardSheet.png';
 
 var deadanimate = 'DeadTwitchGif.gif';
 
-var forwardsjump = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/jumpforwards.png';
-var backwardsjump = 'file:///C:/Users/Stephen/Desktop/GitHub/Digit-Dojo/Digit%20Dojo/jumpbackwards.png';
+var forwardsjump = 'jumpforwards.png';
+var backwardsjump = 'jumpbackwards.png';
+
+var forwardsenemy = 'BadGuy1.png';
 
 var canvasheight = 600;
 var canvaswidth = 600;
@@ -64,6 +67,8 @@ var speechbubble1 = new entityObject(0,0,blank);
 
 var player = new entityObject(0,400,forwardsheet);
 
+var enemy = new entityObject(60,0,forwardsenemy)
+
 var floor = new entityObject(0,485,'floor.png');
 
 var Fscenery = new entityObject(0,0,'Fscenery.png');
@@ -72,16 +77,20 @@ var Bscenery = new entityObject(0,0,'Bscenery.png');
 
 
 
+
+
+
 function gameloop(){
-<<<<<<< HEAD
+
+
+
+
 //console.log(player.y);
 if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
 
 //jumpspeed
-console.log(player.Image.src)
 
-	
-=======
+
 
 	if(player.x > (canvaswidth/2)) {
 		Xoffset = player.x - (canvaswidth/2)
@@ -93,21 +102,25 @@ console.log(player.Image.src)
 		player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01);
 	}
 		
->>>>>>> origin/master
 	player.y = player.y - player.jumpspeed;
 	
 	if(framepos == 308){framepos = 0};
 	
 	if(framevalue == (framespeed + 1)){framevalue = 0};
-<<<<<<< HEAD
+
+	
+	var srcsimplifier = player.Image.src.replace(/^.*[\\\/]/, '');
+
+console.log(srcsimplifier);
 	
 if(player.y < 400){
 player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
-} else if (player.Image.src == forwardsjump){
+} else if (srcsimplifier == forwardsjump){
 	player.Image.src = forwardsheet;
-	} else if (player.Image.src == backwardsjump) {
+	} else if (srcsimplifier == backwardsjump) {
 		player.Image.src = backwardsheet;	
-		}
+		};
+		
 	
 		
 	
@@ -120,22 +133,12 @@ if (keys[38] || keys[32] || keys[87]){
 		
 		if(player.jumpspeed > 0.1){
 			player.Image.src = forwardsjump;
+			}
 		}
-=======
-		
+	};
+	
 
-	//keys
-	if (keys[38] || keys[32] || keys[87]){
-		//space, w, up arrow
-		
-		if(player.y >= 400){
-			player.jumpspeed = 30;
-		
-			player.Image.src = forwardsjump;
-		}
-		
->>>>>>> origin/master
-	}
+
 
   	if (keys[39] || keys[68]) {
         // right arrow
@@ -145,15 +148,10 @@ if (keys[38] || keys[32] || keys[87]){
 		
 		if(player.y < 400){
 			player.Image.src = forwardsjump
-<<<<<<< HEAD
-		
-			
-			}else if(player.y >= 400){
-=======
-		}
-			
+	
+			}
 		else if(player.y >= 400){
->>>>>>> origin/master
+
 			
 			player.Image.src = forwardsheet;
 			
@@ -216,6 +214,7 @@ if (keys[38] || keys[32] || keys[87]){
 
 	setTimeout(gameloop, 25);
 
+	
 };
 	
 function Draw(){
@@ -258,6 +257,11 @@ function Draw(){
 		{
 		player.y = 400
 		}
+		
+	//draw enemy
+	
+	ctx.drawImage(enemy.Image, enemy.x, enemy.y);
+	
 	//draw player;
 	if (player.y >= 400) {
 		ctx.drawImage(player.Image, framepos, 0, 44, 94, player.x - Xoffset, player.y, 44, 94);
