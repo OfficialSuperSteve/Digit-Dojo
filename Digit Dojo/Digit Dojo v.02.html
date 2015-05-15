@@ -51,11 +51,11 @@ var Xoffset = 0;
 var bubbles = ['speech1.png', 'speech2.png', 'speech3.png', 'speech4.png', 'speech5.png'];
 
 function entityObject(x,y,image) {
-this.Image = new Image();
-this.Image.src = image;
-this.x = x;
-this.y = y;
-this.jumpspeed = 0;
+	this.Image = new Image();
+	this.Image.src = image;
+	this.x = x;
+	this.y = y;
+	this.jumpspeed = 0;
 };
 
 
@@ -73,6 +73,7 @@ var Bscenery = new entityObject(0,0,'Bscenery.png');
 
 
 function gameloop(){
+<<<<<<< HEAD
 //console.log(player.y);
 if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
 
@@ -80,11 +81,25 @@ if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
 console.log(player.Image.src)
 
 	
+=======
+
+	if(player.x > (canvaswidth/2)) {
+		Xoffset = player.x - (canvaswidth/2)
+	};
+
+	//jumpspeed
+
+	if(player.jumpspeed > 0){
+		player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01);
+	}
+		
+>>>>>>> origin/master
 	player.y = player.y - player.jumpspeed;
 	
 	if(framepos == 308){framepos = 0};
 	
 	if(framevalue == (framespeed + 1)){framevalue = 0};
+<<<<<<< HEAD
 	
 if(player.y < 400){
 player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
@@ -106,11 +121,23 @@ if (keys[38] || keys[32] || keys[87]){
 		if(player.jumpspeed > 0.1){
 			player.Image.src = forwardsjump;
 		}
-	}
-	
-}
+=======
+		
 
-  if (keys[39] || keys[68]) {
+	//keys
+	if (keys[38] || keys[32] || keys[87]){
+		//space, w, up arrow
+		
+		if(player.y >= 400){
+			player.jumpspeed = 30;
+		
+			player.Image.src = forwardsjump;
+		}
+		
+>>>>>>> origin/master
+	}
+
+  	if (keys[39] || keys[68]) {
         // right arrow
 		
 		player.x = player.x + 3.5;
@@ -118,9 +145,15 @@ if (keys[38] || keys[32] || keys[87]){
 		
 		if(player.y < 400){
 			player.Image.src = forwardsjump
+<<<<<<< HEAD
 		
 			
 			}else if(player.y >= 400){
+=======
+		}
+			
+		else if(player.y >= 400){
+>>>>>>> origin/master
 			
 			player.Image.src = forwardsheet;
 			
@@ -141,9 +174,9 @@ if (keys[38] || keys[32] || keys[87]){
 		
 		if(player.y < 400){
 			player.Image.src = backwardsjump;
-			}
+		}
 			
-			else if(player.y >= 400){
+		else if(player.y >= 400){
 			
 			player.Image.src = backwardsheet;
 			
@@ -155,27 +188,26 @@ if (keys[38] || keys[32] || keys[87]){
 		}
 	}
 	else {
-	framepos = 0;
-	
+		framepos = 0;
 	};
 		
 	if (keys[40]) {
-	player.Image.src = deadanimate;
+		player.Image.src = deadanimate;
 	}
 		
 		
 		
-		//BUBBLES
+	//BUBBLES
 		
 	if (keys[84] && activespeech == false){
 	
 	
-	var randombubble = Math.floor(Math.random()*5);
-	console.log(randombubble);
-	speechbubble1.Image.src = bubbles[randombubble];
-	activespeech = true;
-	setTimeout ("speechbubble1.Image.src = blank", 4000);
-	setTimeout ("activespeech = false", 4000);
+		var randombubble = Math.floor(Math.random()*5);
+		console.log(randombubble);
+		speechbubble1.Image.src = bubbles[randombubble];
+		activespeech = true;
+		setTimeout ("speechbubble1.Image.src = blank", 4000);
+		setTimeout ("activespeech = false", 4000);
 	}
 	
 	if (player.y < floor.y){player.y += gravity}
