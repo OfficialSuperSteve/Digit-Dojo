@@ -17,23 +17,16 @@ ctx.fillRect(0,0,canvas.width,canvas.height);
 
 
 var gravity = 10;
+var playerspeed = 3.5;
+var playerdead = false;
 var keys = [];
 var boxes = [];
 var enemies = [];
 var color = "#aee";
 
-var deadimage = 'Dead Person.gif';
-var deadtwitchimage = 'Dead Person Twitch.gif';
-
-var forwardsheet = 'ForwardSheet.png';
-var backwardsheet = 'BackwardSheet.png';
-
-var deadanimate = 'DeadTwitchGif.gif';
-
-var forwardsjump = 'jumpforwards.png';
-var backwardsjump = 'jumpbackwards.png';
-
 var forwardsenemy = 'BadGuy1.png';
+
+var playersheet = 'PlayerSheet.png';
 
 var canvasheight = 600;
 var canvaswidth = 600;
@@ -41,9 +34,13 @@ var canvaswidth = 600;
 var framevalue = 0;
 var framespeed = 1;
 
-var framepos = 0;
+var Xframepos = 0;
+var Yframepos = 0;
 var framewidth = 44;
+var frameheight = 94;
 
+var Xbubblepos = 0;
+var Ybubblepos = 0;
 var blank = 'blank.png';
 
 var playerjump = false;
@@ -66,7 +63,7 @@ function entityObject(x,y,image) {
 
 var speechbubble1 = new entityObject(0,0,blank);
 
-var player = new entityObject(0,400,forwardsheet);
+var player = new entityObject(0,400,playersheet);
 
 var enemy = new entityObject(120,0,forwardsenemy)
 
@@ -83,19 +80,9 @@ var Bscenery = new entityObject(0,0,'Bscenery.png');
 
 function gameloop(){
 
+	//keeping the player at center of screen
+	if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
 
-
-
-//console.log(player.y);
-if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
-
-//jumpspeed
-
-
-
-	if(player.x > (canvaswidth/2)) {
-		Xoffset = player.x - (canvaswidth/2)
-	};
 
 	//jumpspeed
 
@@ -105,35 +92,34 @@ if(player.x > (canvaswidth/2)) {Xoffset = player.x - (canvaswidth/2)};
 		
 	player.y = player.y - player.jumpspeed;
 	
-	if(framepos == 308){framepos = 0};
+	if(Xframepos == 308){Xframepos = 0};
 	
 	if(framevalue == (framespeed + 1)){framevalue = 0};
 
 	
 	var srcsimplifier = player.Image.src.replace(/^.*[\\\/]/, '');
 
-console.log(srcsimplifier);
 	
 if(player.y < 400){
 player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
-} else if (srcsimplifier == forwardsjump){
-	player.Image.src = forwardsheet;
-	} else if (srcsimplifier == backwardsjump) {
-		player.Image.src = backwardsheet;	
+} else if (Yframepos == 2*frameheight && Xframepos == 0){
+	Yframepos = 0;
+	} else if (Yframepos == 2*frameheight && Xframepos == framewidth) {
+		Yframepos = frameheight;	
 		};
 		
 	
-		
+
 	
 //keys
 if (keys[38] || keys[32] || keys[87]){
 	//space, w, up arrow
 	
-	if(player.y >= 400){
+	if(player.y >= 400 && playerdead == false){
 		player.jumpspeed = 30;
-		
-		if(player.jumpspeed > 0.1){
-			player.Image.src = forwardsjump;
+				if(player.jumpspeed > 0.1){
+			Yframepos = 2*frameheight;
+			Xframepos = 0;
 			}
 		}
 	};
@@ -144,23 +130,23 @@ if (keys[38] || keys[32] || keys[87]){
   	if (keys[39] || keys[68]) {
         // right arrow
 		
-		player.x = player.x + 3.5;
+		player.x = player.x + playerspeed;
 		
 		
 		if(player.y < 400){
-			player.Image.src = forwardsjump
-	
+			Yframepos = 2*frameheight;
+			Xframepos = 0;
 			}
-		else if(player.y >= 400){
+		else if(player.y >= 400 && playerdead == false){
 
 			
-			player.Image.src = forwardsheet;
+			Yframepos = 0;
 			
 			framevalue = framevalue + 1;
 			
 			
 			if(framevalue == framespeed){
-				framepos = framepos + 44
+				Xframepos = Xframepos + framewidth;
 			}
 		}
 	}
@@ -169,66 +155,111 @@ if (keys[38] || keys[32] || keys[87]){
 	else if (keys[37] || keys[65]) {
         // left arrow
 		
-		player.x = player.x - 3.5;
+		player.x = player.x - playerspeed;
 		
 		if(player.y < 400){
-			player.Image.src = backwardsjump;
-		}
+			Yframepos = 2*frameheight;
+			Xframepos = framewidth;
+		} 
+		
+		else if(player.y >= 400 && playerdead == false){
 			
-		else if(player.y >= 400){
-			
-			player.Image.src = backwardsheet;
+			Yframepos = frameheight;
 			
 			framevalue = framevalue + 1;
 			
 			if(framevalue == framespeed){
-				framepos = framepos + 44
+		
+				Xframepos = Xframepos + framewidth;
 			}
 		}
 	}
-	else {
-		framepos = 0;
+	else if(player.y >= 400){
+		Xframepos = 0;
 		
 	};
 		
+//declare death state
 	if (keys[40]) {
-		player.Image.src = deadanimate;
-		
-			if(srcsimplifier == deadanimate){
-			framewidth = 94
-			}
+		playerdead = true;	
+	}
+	
+/* death state conditions are seperate from down arrow because later on
+it'll be multiple things that will trigger the death state, and
+none of them will be the down arrow */
 			
 		
-		
-	} else {framewidth = 44}
-		
-		
-		
-	//BUBBLES
-		
+//BUBBLES
+
 	if (keys[84] && activespeech == false){
 	
 	
 		var randombubble = Math.floor(Math.random()*5);
-		console.log(randombubble);
+		
 		speechbubble1.Image.src = bubbles[randombubble];
 		activespeech = true;
 		setTimeout ("speechbubble1.Image.src = blank", 4000);
 		setTimeout ("activespeech = false", 4000);
-	}
+	};
 	
-	if (player.y < floor.y){player.y += gravity}
 	
-	if (enemy.y < floor.y){enemy.y += gravity}
-
+		
+	Parameters();
+	
 	Draw();
-
+	
+	
+	
 	setTimeout(gameloop, 25);
 
 	
 };
 	
+function Parameters(){
+	console.log(player.y);
+	
+
+	//enforcing gravity
+	if (player.y < floor.y){player.y += gravity}
+	
+	if (enemy.y < floor.y){enemy.y += gravity}
+	
+	//enforcing death conditions
+	if(playerdead == true){
+	
+		framespeed = 10;
+	
+		Yframepos = 3*frameheight;
+		
+		framevalue = framevalue + 1;
+			
+			
+			if(framevalue == framespeed){
+				Xframepos = Math.floor(Math.random()*2)*94
+			}
+		
+		//the death animation is 94 pixels wide, as opposed to the usual 44
+		framewidth = 94;
+		
+		playerspeed = 0;
+	};
+
+	//checking where to draw bubble
+	if(playerdead == false){
+	
+			Xbubblepos = (player.x + 37.5) - Xoffset;
+			Ybubblepos = player.y - 35;
+			
+		} else if(playerdead == true){
+		
+			Xbubblepos = (player.x + 95) - Xoffset;
+			Ybubblepos = player.y + 25;
+			
+		}
+};
+	
 function Draw(){
+	
 
 	//draw background
 	ctx.fillStyle = "grey";
@@ -263,7 +294,7 @@ function Draw(){
 		ctx.drawImage(floor.Image, canvaswidth+(floor.x -(Xoffset % canvaswidth)),floor.y)
 		}
 
-	//enforce floor
+	//enforcing floor
 	if(player.y > 400)
 		{
 		player.y = 400
@@ -273,19 +304,18 @@ function Draw(){
 		{
 		enemy.y = 400
 		};
-		
+	
 	//draw enemy
 	
-	ctx.drawImage(enemy.Image, enemy.x, enemy.y);
+	ctx.drawImage(enemy.Image, enemy.x - Xoffset, enemy.y);
 	
 	//draw player;
-	if (player.y >= 400) {
-		ctx.drawImage(player.Image, framepos, 0, framewidth, 94, player.x - Xoffset, player.y, framewidth, 94);
-	} else {
-		ctx.drawImage(player.Image, player.x - Xoffset, player.y);
-	}
+	
+	ctx.drawImage(player.Image, Xframepos, Yframepos, framewidth, frameheight, player.x - Xoffset, player.y, framewidth, frameheight);
+
+	//draw speech
 	 
-	ctx.drawImage(speechbubble1.Image,((player.x+35)-Xoffset),player.y-30);
+	ctx.drawImage(speechbubble1.Image,Xbubblepos,Ybubblepos);
 };
 
 
