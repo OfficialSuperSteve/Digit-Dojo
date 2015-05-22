@@ -19,6 +19,7 @@ ctx.fillRect(0,0,canvas.width,canvas.height);
 var gravity = 10;
 var playerspeed = 3.5;
 var playerdead = false;
+var playerpunch = false;
 var keys = [];
 var boxes = [];
 var enemies = [];
@@ -111,23 +112,20 @@ player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
 	
 console.log(Yframepos);
 	
-//keys
-if (keys[32] && playerdead == false && player.jumpspeed < 0.1) {
-	//space
-	Yframepos = 4*frameheight;
+
+
+
+if (playerpunch == false){
 	
-	Xframepos = 0;
-}
 
-
-if (keys[38] || keys[87]){
+	if (keys[38] || keys[87]){
 	//w, up arrow
 	
-	if(player.y >= 400 && playerdead == false){
-		player.jumpspeed = 30;
-		if(Yframepos == 0){
-			Yframepos = 2*frameheight;
-			Xframepos = 0;
+		if(player.y >= 400 && playerdead == false){
+			player.jumpspeed = 30;
+				if(Yframepos == 0){
+					Yframepos = 2*frameheight;
+					Xframepos = 0;
 			} else if (Yframepos == frameheight){
 			Yframepos = 2*frameheight;
 			Xframepos = framewidth;
@@ -136,11 +134,11 @@ if (keys[38] || keys[87]){
 };
 	
 
-
-
   	if (keys[39] || keys[68]) {
         // right arrow
 		
+		
+		framewidth = 44;
 		player.x = player.x + playerspeed;
 		
 		
@@ -187,7 +185,22 @@ if (keys[38] || keys[87]){
 	}
 	else if(player.y >= 400){
 		Xframepos = 0;
-	};
+	}
+};
+
+if (keys[32] && playerdead == false && player.jumpspeed < 0.1) {
+	//space punch
+	playerpunch = true;
+	
+		framewidth = 60;
+		Yframepos = 4*frameheight;
+		Xframepos = 2*framewidth;
+		
+} else {
+	playerpunch = false;
+	framewidth = 44;
+	
+};
 
 		
 //declare death state
