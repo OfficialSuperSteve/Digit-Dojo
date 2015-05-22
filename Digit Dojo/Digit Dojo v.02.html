@@ -58,6 +58,7 @@ function entityObject(x,y,image) {
 	this.x = x;
 	this.y = y;
 	this.jumpspeed = 0;
+	this.direction = "right";
 };
 
 
@@ -140,7 +141,7 @@ if (playerpunch == false){
 		
 		framewidth = 44;
 		player.x = player.x + playerspeed;
-		
+		this.direction = "right";
 		
 		if(player.y < 400){
 			Yframepos = 2*frameheight;
@@ -165,6 +166,7 @@ if (playerpunch == false){
         // left arrow
 		
 		player.x = player.x - playerspeed;
+		this.direction = "left";
 		
 		if(player.y < 400){
 			Yframepos = 2*frameheight;
