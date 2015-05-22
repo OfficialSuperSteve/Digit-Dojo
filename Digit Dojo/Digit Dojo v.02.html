@@ -109,20 +109,31 @@ player.jumpspeed = Math.floor(player.jumpspeed - player.jumpspeed*0.01)
 		};
 		
 	
-
+console.log(Yframepos);
 	
 //keys
-if (keys[38] || keys[32] || keys[87]){
-	//space, w, up arrow
+if (keys[32] && playerdead == false && player.jumpspeed < 0.1) {
+	//space
+	Yframepos = 4*frameheight;
+	
+	Xframepos = 0;
+}
+
+
+if (keys[38] || keys[87]){
+	//w, up arrow
 	
 	if(player.y >= 400 && playerdead == false){
 		player.jumpspeed = 30;
-				if(player.jumpspeed > 0.1){
+		if(Yframepos == 0){
 			Yframepos = 2*frameheight;
 			Xframepos = 0;
-			}
+			} else if (Yframepos == frameheight){
+			Yframepos = 2*frameheight;
+			Xframepos = framewidth;
 		}
-	};
+	}
+};
 	
 
 
@@ -176,8 +187,8 @@ if (keys[38] || keys[32] || keys[87]){
 	}
 	else if(player.y >= 400){
 		Xframepos = 0;
-		
 	};
+
 		
 //declare death state
 	if (keys[40]) {
